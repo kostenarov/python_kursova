@@ -1,5 +1,4 @@
 import pygame
-#import sys
 
 
 pygame.init()
@@ -76,11 +75,11 @@ def menu():
                     buildings_menu()
                 elif b9.collidepoint(mx, my):
                     buildings_menu()
-                if buy_factory.collidepoint(pygame.mouse.get_pos()):
+                if buy_factory.collidepoint(mx, my):
                     print("factory")
-                if buy_cleaning.collidepoint(pygame.mouse.get_pos()):
+                if buy_cleaning.collidepoint(mx, my):
                     print("cleaning station")
-                if buy_windturbine.collidepoint(pygame.mouse.get_pos()):
+                if buy_windturbine.collidepoint(mx, my):
                     print("windturbine")
         pygame.display.update()
 menu()
