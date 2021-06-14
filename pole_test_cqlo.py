@@ -56,18 +56,22 @@ def buy_menu():
     buy_land = button2(screen, (500, 250), "                    BUY                   ", "pink")
 
 
-def menu():
+def menu(factory_bought=None):
     global buy_factory, buy_cleaning, buy_windturbine, buy_land, counter, exit
     factory = Factory(1000, 10, 0, 500)
     windturbine = Windturbine(2000, 0, 0, 200)
-    cleaning_station = Cleaning_station(3500, 0.1, 0, 0)
+    cleaning_station = Cleaning_station(3500, 0.75, 0, 0)
     cleaning = cleaning_station.polution
     money = 1000000
     counter_factory = 0
     counter_windturbine = 0
     counter_cleaning_station = 0
     polution = 0
-    income=0
+    income = 0
+    land_bought = False
+    factory_bought = False
+    cleaning_bought = False
+    windturbine_bought = False
     b = [[11, 12, 5], [15, 6, 10], [10, 8, 12], [12, 15, 8]]
 
 
@@ -97,18 +101,22 @@ def menu():
                 if buy_land.collidepoint(mx, my) and money >= 1500:
                     pygame.draw.rect(screen, (255, 182, 193), b[save_i][save_j])
                     money = money - 1500
-                if buy_factory.collidepoint(mx, my) and money >= factory.cost and buy_land.collidepoint(mx, my) == True:
+                    land_bought =True
+                if buy_factory.collidepoint(mx, my) and money >= factory.cost and land_bought == True:
                     pygame.draw.rect(screen, (255, 0, 0), b[save_i][save_j])
                     money = money - factory.cost
                     counter_factory = counter_factory + 1
-                if buy_cleaning.collidepoint(mx, my) and money >= cleaning_station.cost:
+                    factory_bought = True
+                if buy_cleaning.collidepoint(mx, my) and money >= cleaning_station.cost and land_bought == True:
                     pygame.draw.rect(screen, (0, 0, 255), b[save_i][save_j])
                     money = money - cleaning_station.cost
                     counter_cleaning_station = counter_cleaning_station + 1
-                if buy_windturbine.collidepoint(mx, my) and money >= windturbine.cost:
+                    cleaning_bought = True
+                if buy_windturbine.collidepoint(mx, my) and money >= windturbine.cost and land_bought == True:
                     pygame.draw.rect(screen, (0, 255, 0), b[save_i][save_j])
                     money = money - windturbine.cost
                     counter_windturbine = counter_windturbine + 1
+                    windturbine_bought = True
                 else:
                     print("no money")
                 income = factory.income * counter_factory + windturbine.income * counter_windturbine
