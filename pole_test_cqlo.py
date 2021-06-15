@@ -7,6 +7,10 @@ pygame.init()
 
 screen = pygame.display.set_mode((800, 600))
 
+color = (106, 111, 41)
+
+screen.fill(color)
+
 counter = 0
 
 
@@ -56,22 +60,13 @@ def buy_menu():
     buy_land = button2(screen, (500, 250), "                    BUY                   ", "pink")
 
 
-def print_money(position, text):
-    font = pygame.font.SysFont("Stencil", 40)
-    text_render = font.render(text, 1, (128,0,128))
-    x, y = position
-    return screen.blit(text_render, (x, y))
-
-
 def menu(income=None):
     global buy_factory, buy_cleaning, buy_windturbine, buy_land, counter, exit
     factory = Factory(1000, 10, 0, 500)
     windturbine = Windturbine(2000, 0, 0, 200)
     cleaning_station = Cleaning_station(3500, 0.75, 0, 0)
-    cleaning = cleaning_station.polution
+    cleaning = 1
     money = 1000000
-    display = print_money((460, 30), "MONEY: " + str(money))
-
     counter_factory = 0
     counter_windturbine = 0
     counter_cleaning_station = 0
@@ -108,22 +103,17 @@ def menu(income=None):
                     pygame.draw.rect(screen, (255, 182, 193), b[save_i][save_j])
                     money = money - 1500
                     bought[save_i][save_j] = 10
-                if buy_factory.collidepoint(mx, my) and money >= factory.cost and bought[save_i][save_j] == 10 and \
-                        bought[save_i][save_j] != 11 and bought[save_i][save_j] != 12 and bought[save_i][save_j] != 13:
+                if buy_factory.collidepoint(mx, my) and money >= factory.cost and bought[save_i][save_j] == 10 and bought[save_i][save_j] != 11 and bought[save_i][save_j] != 12 and bought[save_i][save_j] != 13:
                     pygame.draw.rect(screen, (255, 0, 0), b[save_i][save_j])
                     money = money - factory.cost
                     counter_factory = counter_factory + 1
                     bought[save_i][save_j] = 11
-                if buy_cleaning.collidepoint(mx, my) and money >= cleaning_station.cost and bought[save_i][
-                    save_j] == 10 and bought[save_i][save_j] != 11 and bought[save_i][save_j] != 12 and bought[save_i][
-                    save_j] != 13 and counter_cleaning_station < 2:
+                if buy_cleaning.collidepoint(mx, my) and money >= cleaning_station.cost and bought[save_i][save_j] == 10 and bought[save_i][save_j] != 11 and bought[save_i][save_j] != 12 and bought[save_i][save_j] != 13 and counter_cleaning_station < 2:
                     pygame.draw.rect(screen, (0, 0, 255), b[save_i][save_j])
                     money = money - cleaning_station.cost
                     counter_cleaning_station = counter_cleaning_station + 1
                     bought[save_i][save_j] = 12
-                if buy_windturbine.collidepoint(mx, my) and money >= windturbine.cost and bought[save_i][
-                    save_j] == 10 and bought[save_i][save_j] != 11 and bought[save_i][save_j] != 12 and bought[save_i][
-                    save_j] != 13:
+                if buy_windturbine.collidepoint(mx, my) and money >= windturbine.cost and bought[save_i][save_j] == 10 and bought[save_i][save_j] != 11 and bought[save_i][save_j] != 12 and bought[save_i][save_j] != 13:
                     pygame.draw.rect(screen, (0, 255, 0), b[save_i][save_j])
                     money = money - windturbine.cost
                     counter_windturbine = counter_windturbine + 1
@@ -134,15 +124,17 @@ def menu(income=None):
                 income = factory.income * counter_factory + windturbine.income * counter_windturbine
                 print(income)
                 print(money)
+                if counter_cleaning_station == 0:
+                    polution = polution + factory.polution * counter_factory
                 if counter_cleaning_station > 0:
-                    polution = polution + factory.polution * counter_factory
-                    polution = polution * cleaning_station.polution
+                    for i in range(counter_cleaning_station):
+                        cleaning = cleaning * cleaning_station.polution
+                    polution = polution + factory.polution * counter_factory * cleaning
                     polution = round(polution, 2)
-                else:
-                    polution = polution + factory.polution * counter_factory
+
                 print(polution)
                 if polution > 300:
-                    print("u ded")
+                     print("u ded")
 
         pygame.display.update()
 
