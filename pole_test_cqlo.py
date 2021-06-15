@@ -76,7 +76,7 @@ def menu():
     b = [[11, 12, 5, 2], [15, 6, 10, 3], [10, 8, 12, 6], [12, 15, 8, 69], [12, 15, 8, 69]]
     bought = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
 
-    def display():
+    def display_text():
         font = pygame.font.SysFont("Stencil", 40)
 
         BarColor = (119, 136, 153)
@@ -108,7 +108,7 @@ def menu():
         else:
             polution = polution + factory.polution * (counter_factory + counter_factory_upgrade)
 
-        display()
+        display_text()
 
         if polution > 100:
             income = 0
