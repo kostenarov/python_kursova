@@ -64,7 +64,6 @@ def menu():
     factory = Factory(1000, 0.03, 0, 1.5)
     windturbine = Windturbine(2000, 0, 0, 0.5)
     cleaning_station = Cleaning_station(3500, 0.055, 0, 0)
-    cleaning = cleaning_station.polution
     color = (0, 0, 0)
     money = 70000
     counter_factory = 0
@@ -108,7 +107,6 @@ def menu():
             polution = round(polution, 2)
         else:
             polution = polution + factory.polution * (counter_factory + counter_factory_upgrade)
-
 
         display()
 
