@@ -47,40 +47,43 @@ def button2(screen, position, text, color):
 
 
 def buildings_menu():
-    global buy_factory, buy_cleaning, buy_windturbine, exit
-    buy_factory = button2(screen, (500, 100), "          BUY FACTORY         ", "red")
-    buy_cleaning = button2(screen, (500, 150), "BUY CLEANING STATION", "blue")
-    buy_windturbine = button2(screen, (500, 200), "          BUY WINDMILL         ", "green")
-    exit = button2(screen, (500, 300), "               UPGRADE             ", "red")
+    global buy_factory, buy_cleaning, buy_windturbine, upgrade
+    buy_factory = button2(screen, (500, 100), "     BUY FACTORY: 1000   ", "red")
+    buy_cleaning = button2(screen, (500, 150), " BUY CL. STATION: 3500  ", "blue")
+    buy_windturbine = button2(screen, (500, 200), "     BUY WINDMILL: 2000  ", "green")
+    upgrade = button2(screen, (500, 300), "       UPGRADE: 10000       ", "red")
 
 
 def buy_menu():
     global buy_land
-    buy_land = button2(screen, (500, 250), "                    BUY                   ", "pink")
+    buy_land = button2(screen, (500, 250), "               BUY: 1500             ", "pink")
 
 
 def menu():
-    global buy_factory, buy_cleaning, buy_windturbine, buy_land, counter, exit, clock, income
-    factory = Factory(1000, 0.07, 0, 5)
-    windturbine = Windturbine(2000, 0, 0, 2)
+    global buy_factory, buy_cleaning, buy_windturbine, buy_land, counter, upgrade, clock, income
+    factory = Factory(1000, 0.03, 0, 1.5)
+    windturbine = Windturbine(2000, 0, 0, 0.5)
     cleaning_station = Cleaning_station(3500, 0.055, 0, 0)
     cleaning = cleaning_station.polution
     color = (0, 0, 0)
-    money = 7000
+    money = 70000
     counter_factory = 0
     counter_windturbine = 0
     counter_cleaning_station = 0
+    counter_factory_upgrade = 0
+    counter_cleaning_station_upgrade = 0
+    counter_windturbine_upgrade = 0
     polution = 0
     b = [[11, 12, 5, 2], [15, 6, 10, 3], [10, 8, 12, 6], [12, 15, 8, 69], [12, 15, 8, 69]]
     bought = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
 
-    def display_shit():
+    def display():
         font = pygame.font.SysFont("Stencil", 40)
 
         BarColor = (119, 136, 153)
         pygame.draw.rect(screen, color, pygame.Rect(610, 35, 170, 45))
         pygame.display.flip()
-        Score_display = font.render(f"MONEY : {money}", 1, (128, 0, 128))
+        Score_display = font.render(f"MONEY : {money}", 1, (5, 50, 32))
         screen.blit(Score_display, (450, 35))
         pygame.draw.rect(screen, BarColor, [80, 30, polution * 3, 30])
 
@@ -100,14 +103,14 @@ def menu():
     while running == 0:
         mx, my = pygame.mouse.get_pos()
         money += income
-        if counter_cleaning_station > 0:
-            polution = polution + factory.polution * counter_factory - cleaning_station.polution
+        if counter_cleaning_station > 0 or counter_cleaning_station_upgrade > 0:
+            polution = polution + factory.polution * (counter_factory + counter_factory_upgrade) - (cleaning_station.polution * counter_cleaning_station + 3 * cleaning_station.polution * counter_cleaning_station_upgrade)
             polution = round(polution, 2)
         else:
-            polution = polution + factory.polution * counter_factory
+            polution = polution + factory.polution * (counter_factory + counter_factory_upgrade)
 
 
-        display_shit()
+        display()
 
         if polution > 100:
             income = 0
@@ -132,34 +135,49 @@ def menu():
                     money = money - 1500
                     bought[save_i][save_j] = 10
                 if buy_factory.collidepoint(mx, my) and money >= factory.cost and bought[save_i][save_j] == 10 and \
-                        bought[save_i][save_j] != 11 and bought[save_i][save_j] != 12 and bought[save_i][save_j] != 13:
+                        bought[save_i][save_j] != 11 and bought[save_i][save_j] != 12 and bought[save_i][save_j] != 13 and bought[save_i][save_j] != 21 and bought[save_i][save_j] != 22 and bought[save_i][save_j] != 23:
                     pygame.draw.rect(screen, (255, 0, 0), b[save_i][save_j])
                     money = money - factory.cost
                     counter_factory = counter_factory + 1
                     bought[save_i][save_j] = 11
-
                 if buy_cleaning.collidepoint(mx, my) and money >= cleaning_station.cost and bought[save_i][
                     save_j] == 10 and bought[save_i][save_j] != 11 and bought[save_i][save_j] != 12 and bought[save_i][
-                    save_j] != 13:
-                    pygame.draw.rect(screen, (0, 0, 255), b[save_i][save_j])
+                    save_j] != 13 and bought[save_i][save_j] != 21 and bought[save_i][save_j] != 22 and bought[save_i][save_j] != 23:
+                    pygame.draw.rect(screen, (173,216,230), b[save_i][save_j])
                     money = money - cleaning_station.cost
                     counter_cleaning_station = counter_cleaning_station + 1
                     bought[save_i][save_j] = 12
                 if buy_windturbine.collidepoint(mx, my) and money >= windturbine.cost and bought[save_i][
                     save_j] == 10 and bought[save_i][save_j] != 11 and bought[save_i][save_j] != 12 and bought[save_i][
-                    save_j] != 13:
+                    save_j] != 13 and bought[save_i][save_j] != 21 and bought[save_i][save_j] != 22 and bought[save_i][save_j] != 23:
                     pygame.draw.rect(screen, (0, 255, 0), b[save_i][save_j])
                     money = money - windturbine.cost
                     counter_windturbine = counter_windturbine + 1
                     bought[save_i][save_j] = 13
+                if upgrade.collidepoint(mx, my) and money >= 10000 and bought[save_i][save_j] == 11:
+                    pygame.draw.rect(screen, (139,0,0), b[save_i][save_j])
+                    money = money - 10000
+                    counter_factory_upgrade = counter_factory_upgrade + 1
+                    counter_factory = counter_factory - 1
+                    bought[save_i][save_j] = 21
+                if upgrade.collidepoint(mx, my) and money >= 10000 and bought[save_i][save_j] == 12:
+                    pygame.draw.rect(screen, (0, 0, 255), b[save_i][save_j])
+                    money = money - 10000
+                    counter_cleaning_station_upgrade = counter_cleaning_station_upgrade + 1
+                    counter_cleaning_station = counter_cleaning_station - 1
+                    bought[save_i][save_j] = 22
+                if upgrade.collidepoint(mx, my) and money >= 10000 and bought[save_i][save_j] == 13:
+                    pygame.draw.rect(screen, (149,255,128), b[save_i][save_j])
+                    money = money - 10000
+                    counter_windturbine_upgrade = counter_windturbine_upgrade + 1
+                    counter_windturbine = counter_windturbine - 1
+                    bought[save_i][save_j] = 23
                 else:
                     pass
 
-                income = factory.income * counter_factory + windturbine.income * counter_windturbine
-
-
+        income = factory.income * counter_factory + windturbine.income * counter_windturbine + 1.5 * counter_factory_upgrade * factory.income + 1.5 * counter_windturbine_upgrade * windturbine.income
+        money = round(money, 0)
         clock.tick(60)
 
 
 menu()
-
