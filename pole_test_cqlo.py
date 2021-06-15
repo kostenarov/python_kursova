@@ -6,6 +6,10 @@ from buildings import Cleaning_station
 pygame.init()
 
 screen = pygame.display.set_mode((800, 600))
+
+bgcolor = (106, 111, 41)
+
+screen.fill(bgcolor)
 clock = pygame.time.Clock()
 counter = 0
 income = 0
@@ -110,27 +114,22 @@ def menu():
                             save_j = j
                             pass
 
-                if buy_land.collidepoint(mx, my) and money >= 1500:
+                if buy_land.collidepoint(mx, my) and money >= 1500 and bought[save_i][save_j] == 0:
                     pygame.draw.rect(screen, (255, 182, 193), b[save_i][save_j])
                     money = money - 1500
                     bought[save_i][save_j] = 10
-                if buy_factory.collidepoint(mx, my) and money >= factory.cost and bought[save_i][save_j] == 10 and \
-                        bought[save_i][save_j] != 11 and bought[save_i][save_j] != 12 and bought[save_i][save_j] != 13:
+                if buy_factory.collidepoint(mx, my) and money >= factory.cost and bought[save_i][save_j] == 10 and bought[save_i][save_j] != 11 and bought[save_i][save_j] != 12 and bought[save_i][save_j] != 13:
                     pygame.draw.rect(screen, (255, 0, 0), b[save_i][save_j])
                     money = money - factory.cost
                     counter_factory = counter_factory + 1
                     bought[save_i][save_j] = 11
 
-                if buy_cleaning.collidepoint(mx, my) and money >= cleaning_station.cost and bought[save_i][
-                    save_j] == 10 and bought[save_i][save_j] != 11 and bought[save_i][save_j] != 12 and bought[save_i][
-                    save_j] != 13 and counter_cleaning_station < 2:
+                if buy_cleaning.collidepoint(mx, my) and money >= cleaning_station.cost and bought[save_i][save_j] == 10 and bought[save_i][save_j] != 11 and bought[save_i][save_j] != 12 and bought[save_i][save_j] != 13 and counter_cleaning_station < 2:
                     pygame.draw.rect(screen, (0, 0, 255), b[save_i][save_j])
                     money = money - cleaning_station.cost
                     counter_cleaning_station = counter_cleaning_station + 1
                     bought[save_i][save_j] = 12
-                if buy_windturbine.collidepoint(mx, my) and money >= windturbine.cost and bought[save_i][
-                    save_j] == 10 and bought[save_i][save_j] != 11 and bought[save_i][save_j] != 12 and bought[save_i][
-                    save_j] != 13:
+                if buy_windturbine.collidepoint(mx, my) and money >= windturbine.cost and bought[save_i][save_j] == 10 and bought[save_i][save_j] != 11 and bought[save_i][save_j] != 12 and bought[save_i][save_j] != 13:
                     pygame.draw.rect(screen, (0, 255, 0), b[save_i][save_j])
                     money = money - windturbine.cost
                     counter_windturbine = counter_windturbine + 1
