@@ -7,7 +7,7 @@ pygame.init()
 
 screen = pygame.display.set_mode((800, 600))
 
-bgcolor = (106, 111, 41)
+bgcolor = (0, 0, 0)
 
 screen.fill(bgcolor)
 clock = pygame.time.Clock()
@@ -63,10 +63,10 @@ def buy_menu():
 
 def menu():
     global buy_factory, buy_cleaning, buy_windturbine, buy_land, counter, exit, clock, income
-    factory = Factory(1000, 10, 0, 5)
+    factory = Factory(1000, 0.09, 0, 5)
     windturbine = Windturbine(2000, 0, 0, 2)
 
-    cleaning_station = Cleaning_station(3500, 0.9, 0, 0)
+    cleaning_station = Cleaning_station(3500, 9, 0, 0)
     cleaning = cleaning_station.polution
     money = 5000
     counter_factory = 0
@@ -76,30 +76,40 @@ def menu():
     b = [[11, 12, 5, 2], [15, 6, 10, 3], [10, 8, 12, 6], [12, 15, 8, 69], [12, 15, 8, 69]]
     bought = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
 
-    def print_money():
+    def display_shit():
         font = pygame.font.SysFont("Stencil", 40)
         color = (0, 0, 0)
+        BarColor = (119, 136, 153)
         pygame.draw.rect(screen, color, pygame.Rect(610, 35, 170, 45))
         pygame.display.flip()
         Score_display = font.render(f"MONEY : {money}", 1, (128, 0, 128))
         screen.blit(Score_display, (450, 35))
+        pygame.draw.rect(screen, BarColor, [80, 30, polution * 3, 30])
 
         pygame.display.update()
 
     for i in range(4):
         for j in range(4):
             if i == 1:
-                b[i][j] = button(screen, ((100 * (j + 1)), 100), "      ")
+                b[i][j] = button(screen, ((90 * (j + 1)), 100), "      ")
             elif i == 2:
-                b[i][j] = button(screen, ((100 * (j + 1)), 200), "      ")
+                b[i][j] = button(screen, ((90 * (j + 1)), 200), "      ")
             elif i == 3:
-                b[i][j] = button(screen, ((100 * (j + 1)), 300), "      ")
+                b[i][j] = button(screen, ((90 * (j + 1)), 300), "      ")
             else:
-                b[i][j] = button(screen, ((100 * (j + 1)), 400), "      ")
+                b[i][j] = button(screen, ((90 * (j + 1)), 400), "      ")
     while True:
         mx, my = pygame.mouse.get_pos()
         money += income
-        print_money()
+        if counter_cleaning_station > 0:
+            polution = polution + factory.polution * counter_factory - cleaning_station.polution * counter_cleaning_station
+            polution = round(polution, 2)
+        else:
+            polution = polution + factory.polution * counter_factory
+        print(polution)
+        if polution > 300:
+            print("u ded")
+        display_shit()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -140,15 +150,8 @@ def menu():
                 income = factory.income * counter_factory + windturbine.income * counter_windturbine
                 print(income)
                 print(money)
-                if counter_cleaning_station > 0:
-                    polution = polution + factory.polution * counter_factory
-                    polution = polution * cleaning_station.polution
-                    polution = round(polution, 2)
-                else:
-                    polution = polution + factory.polution * counter_factory
-                print(polution)
-                if polution > 300:
-                    print("u ded")
+                print("!50 * 2 e 300 kura mi motor guza ti pista usssssssssssssssss")
+
 
         clock.tick(60)
 
