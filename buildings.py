@@ -55,8 +55,7 @@ class Cleaning_station(Building):
 
     def upgrade(self):
         if self.__upgrade == 2:
-            self.__polution = 0.25 * self.__polution
+            self.__polution = 0.8 * self.__polution
 
         elif self.__upgrade == 1:
-            self.__polution = 0.5 * self.__polution
-
+            self.__polution = 0.9 * self.__polution

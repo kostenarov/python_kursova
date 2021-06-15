@@ -5,7 +5,7 @@ from buildings import Cleaning_station
 
 pygame.init()
 
-screen = pygame.display.set_mode((800, 500))
+screen = pygame.display.set_mode((800, 600))
 
 counter = 0
 
@@ -56,7 +56,7 @@ def buy_menu():
     buy_land = button2(screen, (500, 250), "                    BUY                   ", "pink")
 
 
-def menu(factory_bought=None):
+def menu(income=None):
     global buy_factory, buy_cleaning, buy_windturbine, buy_land, counter, exit
     factory = Factory(1000, 10, 0, 500)
     windturbine = Windturbine(2000, 0, 0, 200)
@@ -67,22 +67,20 @@ def menu(factory_bought=None):
     counter_windturbine = 0
     counter_cleaning_station = 0
     polution = 0
-    income = 0
-    land_bought = False
-    factory_bought = False
-    cleaning_bought = False
-    windturbine_bought = False
-    b = [[11, 12, 5], [15, 6, 10], [10, 8, 12], [12, 15, 8]]
+    b = [[11, 12, 5, 2], [15, 6, 10, 3], [10, 8, 12, 6], [12, 15, 8, 69], [12, 15, 8, 69]]
+    bought = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
 
 
-    for i in range(3):
-        for j in range(3):
+    for i in range(4):
+        for j in range(4):
             if i == 1:
-                b[i][j] = button(screen, ((100 * (j + 1) ), 100), "      ")
+                b[i][j] = button(screen, ((100 * (j + 1)), 100), "      ")
             elif i == 2:
                 b[i][j] = button(screen, ((100 * (j + 1)), 200), "      ")
-            else:
+            elif i == 3:
                 b[i][j] = button(screen, ((100 * (j + 1)), 300), "      ")
+            else:
+                b[i][j] = button(screen, ((100 * (j + 1)), 400), "      ")
 
     while True:
         mx, my = pygame.mouse.get_pos()
@@ -90,8 +88,8 @@ def menu(factory_bought=None):
             if event.type == pygame.QUIT:
                 pygame.quit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                for i in range(0, 3):
-                    for j in range(0, 3):
+                for i in range(0, 4):
+                    for j in range(0, 4):
                         if b[i][j].collidepoint(mx, my):
                             buy_menu()
                             buildings_menu()
@@ -101,30 +99,34 @@ def menu(factory_bought=None):
                 if buy_land.collidepoint(mx, my) and money >= 1500:
                     pygame.draw.rect(screen, (255, 182, 193), b[save_i][save_j])
                     money = money - 1500
-                    land_bought =True
-                if buy_factory.collidepoint(mx, my) and money >= factory.cost and land_bought == True:
+                    bought[save_i][save_j] = 10
+                if buy_factory.collidepoint(mx, my) and money >= factory.cost and bought[save_i][save_j] == 10 and bought[save_i][save_j] != 11 and bought[save_i][save_j] != 12 and bought[save_i][save_j] != 13:
                     pygame.draw.rect(screen, (255, 0, 0), b[save_i][save_j])
                     money = money - factory.cost
                     counter_factory = counter_factory + 1
-                    factory_bought = True
-                if buy_cleaning.collidepoint(mx, my) and money >= cleaning_station.cost and land_bought == True:
+                    bought[save_i][save_j] = 11
+                if buy_cleaning.collidepoint(mx, my) and money >= cleaning_station.cost and bought[save_i][save_j] == 10 and bought[save_i][save_j] != 11 and bought[save_i][save_j] != 12 and bought[save_i][save_j] != 13 and counter_cleaning_station < 2:
                     pygame.draw.rect(screen, (0, 0, 255), b[save_i][save_j])
                     money = money - cleaning_station.cost
                     counter_cleaning_station = counter_cleaning_station + 1
-                    cleaning_bought = True
-                if buy_windturbine.collidepoint(mx, my) and money >= windturbine.cost and land_bought == True:
+                    bought[save_i][save_j] = 12
+                if buy_windturbine.collidepoint(mx, my) and money >= windturbine.cost and bought[save_i][save_j] == 10 and bought[save_i][save_j] != 11 and bought[save_i][save_j] != 12 and bought[save_i][save_j] != 13:
                     pygame.draw.rect(screen, (0, 255, 0), b[save_i][save_j])
                     money = money - windturbine.cost
                     counter_windturbine = counter_windturbine + 1
-                    windturbine_bought = True
+                    bought[save_i][save_j] = 13
                 else:
                     print("no money")
+                print(counter_cleaning_station)
                 income = factory.income * counter_factory + windturbine.income * counter_windturbine
                 print(income)
                 print(money)
-                for i in range(counter_cleaning_station):
-                    cleaning = cleaning * cleaning_station.polution
-                polution = polution + factory.polution * counter_factory * cleaning
+                if counter_cleaning_station > 0:
+                    polution = polution + factory.polution * counter_factory
+                    polution = polution * cleaning_station.polution
+                    polution = round(polution, 2)
+                else:
+                    polution = polution + factory.polution * counter_factory
                 print(polution)
                 if polution > 300:
                      print("u ded")
