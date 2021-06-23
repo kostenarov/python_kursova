@@ -174,7 +174,7 @@ def menu():
                     pass
 
         income = factory.income * counter_factory + windturbine.income * counter_windturbine + 1.5 * counter_factory_upgrade * factory.income + 1.5 * counter_windturbine_upgrade * windturbine.income
-        money = round(money, 0)
+        money = round(money, 2)
         clock.tick(60)
 
 
